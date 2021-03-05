@@ -22,41 +22,6 @@ class StoryPage extends StatefulWidget {
 }
 
 class _StoryPageState extends State<StoryPage> {
-  int storyNumber = 0;
-
-  void setStoryNumber(int newStoryNum) {
-    setState(() {
-      storyNumber = newStoryNum;
-    });
-  }
-
-  void nextStory(int choiceNumber) {
-    print('next story ');
-    switch (storyNumber) {
-      case 0:
-        if (choiceNumber == 1) {
-          setStoryNumber(2);
-        } else {
-          setStoryNumber(1);
-        }
-        break;
-      case 1:
-        if (choiceNumber == 1) {
-          setStoryNumber(2);
-        } else {
-          setStoryNumber(3);
-        }
-        break;
-      case 2:
-        if (choiceNumber == 1) {
-          setStoryNumber(5);
-        } else {
-          setStoryNumber(4);
-        }
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +43,7 @@ class _StoryPageState extends State<StoryPage> {
                 child: Center(
                   child: Text(
                     //TODO: Step 10 - use the storyBrain to get the first story title and display it in this Text Widget.
-                    storyBrain.getStory(storyNumber),
+                    storyBrain.getStory(),
                     style: TextStyle(
                       fontSize: 25.0,
                     ),
@@ -90,13 +55,15 @@ class _StoryPageState extends State<StoryPage> {
                 child: FlatButton(
                   onPressed: () {
                     //Choice 1 made by user.
-                    nextStory(1);
+                    setState(() {
+                      storyBrain.nextStory(1);
+                    });
                     //TODO: Step 18 - Call the nextStory() method from storyBrain and pass the number 1 as the choice made by the user.
                   },
                   color: Colors.red,
                   child: Text(
                     //TODO: Step 13 - Use the storyBrain to get the text for choice 1.
-                    storyBrain.getChoice1(storyNumber),
+                    storyBrain.getChoice1(),
                     style: TextStyle(
                       fontSize: 20.0,
                     ),
@@ -106,20 +73,24 @@ class _StoryPageState extends State<StoryPage> {
               SizedBox(
                 height: 20.0,
               ),
-              Expanded(
-                flex: 2,
-                child: FlatButton(
-                  onPressed: () {
-                    //Choice 2 made by user.
-                    nextStory(2);
-                    //TODO: Step 19 - Call the nextStory() method from storyBrain and pass the number 2 as the choice made by the user.
-                  },
-                  color: Colors.blue,
-                  child: Text(
-                    //TODO: Step 14 - Use the storyBrain to get the text for choice 1.
-                    storyBrain.getChoice2(storyNumber),
-                    style: TextStyle(
-                      fontSize: 20.0,
+              Visibility(
+                visible: storyBrain.buttonShouldBeVisible(),
+                child: Expanded(
+                  flex: 2,
+                  child: FlatButton(
+                    onPressed: () {
+                      //Choice 2 made by user.
+                      setState(() {
+                        storyBrain.nextStory(1);
+                      }); //TODO: Step 19 - Call the nextStory() method from storyBrain and pass the number 2 as the choice made by the user.
+                    },
+                    color: Colors.blue,
+                    child: Text(
+                      //TODO: Step 14 - Use the storyBrain to get the text for choice 1.
+                      storyBrain.getChoice2(),
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
                     ),
                   ),
                 ),
